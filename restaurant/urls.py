@@ -10,10 +10,10 @@ from .views import (
 
 urlpatterns = [
     path('register/', UserRegisterView.as_view(), name='register'),
-    path('accounts/login/', UserLoginView.as_view(), name='login'),
+    path('', UserLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
 
-    path('', DishListView.as_view(), name='dish_list'),
+    path('dish', DishListView.as_view(), name='dish_list'),
     path('dish/<int:pk>/', DishDetailView.as_view(), name='dish_detail'),
     path('dish/create/', DishCreateView.as_view(), name='dish_create'),
     path('dish/update/<int:pk>/', DishUpdateView.as_view(), name='dish_update'),
