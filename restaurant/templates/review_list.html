@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Reviews</h2>
+
+  {% if reviews %}
+    <ul>
+      {% for review in reviews %}
+        <li>
+          <strong>{{ review.dish.name }}</strong>: {{ review.rating }} ★ - {{ review.comment }}
+
+          {% if user == review.user and not user.is_staff %}
+            <form method="post" action="{% url 'review_delete' review.id %}">
+              {% csrf_token %}
+              <button type="submit">Delete</button>
+            </form>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Reviews not found</p>
+  {% endif %}
+{% endblock %}

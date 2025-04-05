@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{ dish.name }}</h2>
+  <p>Category: {{ dish.description }}</p>
+  <p>Price: {{ dish.price }}$</p>
+  {% if dish.image %}
+    <img src="{{ dish.image.url }}" alt="{{ dish.name }}" style="max-width: 300px;">
+  {% endif %}
+
+    <h3>Reviews</h3>
+  <ul>
+    {% for review in dish.review_set.all %}
+      <li>
+        <strong>{{ review.user.username }}</strong>: {{ review.rating }} Star - "{{ review.comment }}"
+      </li>
+    {% empty %}
+      <li>Reviews not found</li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}
