@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Add dish</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Add</button>
-  </form>
+<div class="dish_create">
+     <h2>Add dish</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Add</button>
+    </form>
+</div>
+
 {% endblock %}

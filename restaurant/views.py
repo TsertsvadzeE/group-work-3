@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Dish, Order, Review
 from .forms import DishForm, OrderForm, ReviewForm
@@ -12,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 class UserRegisterView(CreateView):
     form_class = UserCreationForm
     template_name = 'registration/register.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('dish_list')
 
     def form_valid(self, form):
         user = form.save()
@@ -25,6 +26,14 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('login')
+
+
+class HomeRedirectView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('dish_list')
+        return redirect('login')
+
 
 class DishListView(ListView):
     model = Dish
@@ -115,7 +124,7 @@ class OrderCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return not self.request.user.is_staff
 
     def get_success_url(self):
-        return reverse_lazy('dish_list')
+        return reverse_lazy('order_list')
 
 class OrderDeleteView (LoginRequiredMixin, UserPassesTestMixin,DeleteView):
     model = Order
@@ -123,8 +132,7 @@ class OrderDeleteView (LoginRequiredMixin, UserPassesTestMixin,DeleteView):
     success_url = reverse_lazy('order_list')
 
     def test_func(self):
-        order = self.get_object()
-        return self.request.user == order.user and not self.request.user.is_staff
+        return self.request.user == self.get_object().user
 
 
 class ReviewListView(LoginRequiredMixin, ListView):
@@ -155,7 +163,7 @@ class ReviewCreateView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
         return self.request.user.is_authenticated
 
     def get_success_url(self):
-        return reverse_lazy('dish_list')
+        return reverse_lazy('review_list')
 
 
 class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -164,8 +172,6 @@ class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('review_list')
 
     def test_func(self):
-        review = self.get_object()
-        return self.request.user == review.user and not self.request.user.is_staff
-
+        return self.request.user == self.get_object().user
 
 

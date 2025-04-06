@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Delete dish</h2>
-  <p>Are you sure you want to delete {{ dish.name }}?</p>
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Delete</button>
-    <a href="{% url 'dish_list' %}">No, take me back</a>
-  </form>
+<div class="dish_delete">
+  <div class="dish_delete_confirm">
+     <h2>Delete dish</h2>
+      <p>Are you sure you want to delete <strong> {{ dish.name }}</strong>?</p>
+      <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="delete_button">Delete</button>
+          <a href="{% url 'dish_list' %}" class="back_button">No, take me back</a>
+      </form>
+  </div>
+</div>
+
 {% endblock %}

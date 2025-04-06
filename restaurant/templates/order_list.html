@@ -1,19 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h2>Orders</h2>
-  <ul>
-    {% for order in orders %}
-      <li>
-        {{ order.dish.name }} - Quantity: {{ order.quantity }} - User: {{ order.user.username }} - Time: {{ order.order_date|date:"Y-m-d H:i" }}
-        {% if user == order.user and not user.is_staff %}
-          <form method="post" action="{% url 'order_delete' pk=order.pk %}">
-            {% csrf_token %}
-            <button type="submit">Delete</button>
-          </form>
-        {% endif %}
-      </li>
-    {% empty %}
-      <li>Orders not found</li>
-    {% endfor %}
-  </ul>
+<div class="order_list">
+    <h2>Orders</h2>
+
+      {% for order in orders %}
+        <div class="order_cards">
+          <div class="card_order">
+              <h3>{{ order.dish.name }}</h3>
+              <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+              <p><strong>User:</strong> {{ order.user.username }}</p>
+              <p><strong>Time:</strong> {{ order.order_date|date:"Y-m-d H:i" }}</p>
+          </div>
+
+          {% if user == order.user and not user.is_staff %}
+             <a href="{% url 'order_delete' pk=order.pk %}" class="delete_btn">Delete</a>
+          {% endif %}
+
+        </div>
+      {% empty %}
+      <div class="empty_message">
+        <h2 >Orders not found</h2>
+      </div>
+      {% endfor %}
+
+</div>
+
 {% endblock %}

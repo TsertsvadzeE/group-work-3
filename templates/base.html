@@ -1,42 +1,81 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Restaurant</title>
+     <link rel="icon" href="{% static 'images/logo.jpg' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 </head>
 <body>
-    <header>
+    <header class="{% if not user.is_authenticated and request.path != '/dish' %}guest_header{%else%}header{% endif %}">
+
         <nav>
             {% if user.is_authenticated %}
                 <p>Hello, {{ user.username }}!</p>
-                <a href="{% url 'dish_list' %}">Home</a>
-                 {% if user.is_staff %}
-                 <a href="{% url 'dish_create' %}">Add dish</a>
-                 {% endif %}
-                <a href="{% url 'order_list' %}">Orders</a>
-                <a href="{% url 'review_list' %}">Reviews</a>
-               <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit">Log out</button>
-                </form>
-            {% else %}
-                <a href="{% url 'dish_list' %}">Home</a>
-                <a href="{% url 'login' %}">Log in</a>
-                <a href="{% url 'register' %}">Register</a>
-            {% endif %}
+                <div class="navigation home_nav">
+                    <a href="{% url 'dish_list' %}">Home</a>
+                     {% if user.is_staff %}
+                     <a href="{% url 'dish_create' %}">Add dish</a>
+                     {% endif %}
+                    <a href="{% url 'order_list' %}">Orders</a>
+                    <a href="{% url 'review_list' %}">Reviews</a>
+                   <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Log out</button>
+                    </form>
+                </div>
+                {% else %}
+                 <div class="navigation home_guest">
+                    <a href="{% url 'dish_list' %}">Home</a>
+                    <a href="{% url 'login' %}">Log in</a>
+                    <a href="{% url 'register' %}">Register</a>
+                 </div>
+                {% endif %}
         </nav>
-        <hr>
     </header>
 
     {% if messages %}
-        <ul>
+        <div id="message-container">
             {% for message in messages %}
-                <li>{{ message }}</li>
+                <p>{{ message }}</p>
             {% endfor %}
-        </ul>
+        </div>
     {% endif %}
 
     <main>
-        {% block content %}{% endblock %}
+        {% block content %}
+
+        {% endblock %}
     </main>
+
+    {% if user.is_authenticated or request.path == '/dish' %}
+    <footer class="footer">
+         <div class="footer-container">
+                <div class="footer-section">
+                    <h4>Restaurant</h4>
+                    <p>Your favorite place to dine!</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: info@restaurant.com</p>
+                    <p>Phone: +1 234 567 890</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="icon">
+                            <i class="fa-brands fa-instagram"> Facebook</i>
+                            <i class="fa-brands fa-facebook"> Instagram</i>
+                            <i class="fa-brands fa-twitter"> Twitter</i>
+                            <i class="fa-brands fa-github"> GitHub</i>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Restaurant. All Rights Reserved.</p>
+            </div>
+    </footer>
+    {% endif %}
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://kit.fontawesome.com/86be0d69cf.js" crossorigin="anonymous"></script>
 </body>
 </html>

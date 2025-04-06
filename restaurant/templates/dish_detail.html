@@ -1,22 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>{{ dish.name }}</h2>
-  <p>Category: {{ dish.description }}</p>
-  <p>Price: {{ dish.price }}$</p>
-  {% if dish.image %}
-    <img src="{{ dish.image.url }}" alt="{{ dish.name }}" style="max-width: 300px;">
-  {% endif %}
+  <div class="dish_detail">
+    <div class="detail">
+        <h3>{{ dish.name }}</h3>
+        <div class="main_detail">
+             <div class="category_price">
+               <p class="description"> Description -  {{ dish.description }}</p>
+              <p> <strong>Category - </strong> {{ dish.category }}</p>
+               <p><strong>Price - </strong> {{ dish.price }}$</p>
 
-    <h3>Reviews</h3>
-  <ul>
-    {% for review in dish.review_set.all %}
-      <li>
-        <strong>{{ review.user.username }}</strong>: {{ review.rating }} Star - "{{ review.comment }}"
-      </li>
-    {% empty %}
-      <li>Reviews not found</li>
-    {% endfor %}
-  </ul>
+            </div>
+           <div class="dish_img">
+              {% if dish.image %}
+                <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+              {% endif %}
+           </div>
+        </div>
 
+    </div>
+
+    <div class="detail_review">
+        <h3>Reviews</h3>
+          {% for review in dish.review_set.all %}
+            <div class="detail_review_list">
+              <p>{{ review.user.username }} -  {{ review.rating }} Star</p>
+              <p class="comment_review">{{ review.comment }}</p>
+            </div>
+          {% empty %}
+            <div class="empty_message">
+              <h2>Reviews not found</h2>
+            </div>
+          {% endfor %}
+        </ul>
+    </div>
+  </div>
 {% endblock %}

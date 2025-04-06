@@ -4,7 +4,6 @@ media/
 __pycache__/
 *.pyc
 .DS_Store
-static/
 *.json
 *.log
 venv/

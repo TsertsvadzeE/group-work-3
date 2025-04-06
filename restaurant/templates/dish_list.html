@@ -1,36 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="dish_list">
   <h2>Menu</h2>
     <form method="get">
-        <input type="text" name="name" placeholder="Name" value="{{ request.GET.name }}">
+         <div class="input-group">
+            <input type="text" name="name" placeholder="Name" value="{{ request.GET.name }}">
 
-       <select name="category">
-          <option value="">Choose Category</option>
-          {% for key, value in category_choices.items %}
-              <option value="{{ key }}" {% if request.GET.category == key %}selected{% endif %}>{{ value }}</option>
-          {% endfor %}
-      </select>
+           <select name="category">
+              <option value="">Choose Category</option>
+              {% for key, value in category_choices.items %}
+                  <option value="{{ key }}" {% if request.GET.category == key %}selected{% endif %}>{{ value }}</option>
+              {% endfor %}
+          </select>
 
-        <input type="number" name="price_min" placeholder="min price" value="{{ request.GET.price_min }}">
-        <input type="number" name="price_max" placeholder="max price" value="{{ request.GET.price_max }}">
-        <button type="submit">Search</button>
+            <input type="number" name="price_min" placeholder="min price" value="{{ request.GET.price_min }}">
+            <input type="number" name="price_max" placeholder="max price" value="{{ request.GET.price_max }}">
+            <button type="submit">Search</button>
+         </div>
     </form>
-    <ul>
+
     {% for dish in dishes %}
-      <li>
-        <a href="{% url 'dish_detail' dish.id %}">{{ dish.name }}</a> - {{ dish.category }} - {{ dish.price }}$
-          {% if user.is_authenticated and not user.is_staff %}
-                <a href="{% url 'order_create' pk=dish.id %}">Add to order</a>
-               <a href="{% url 'review_create' pk=dish.id %}">Make review</a>
-          {% endif %}
-          {% if user.is_authenticated and user.is_staff %}
-                <a href="{% url 'dish_delete' pk=dish.id %}">Delete</a>
-                <a href="{% url 'dish_update' pk=dish.id %}">Edit</a>
-          {% endif %}
-      </li>
+      <div class="dish_card">
+          <div class="dish-info">
+               <a href="{% url 'dish_detail' dish.id %}"> <strong>{{ dish.name }}</strong> </a>
+                <p>{{ dish.category }} - {{ dish.price }}$</p>
+          </div>
+          <div class="button_group">
+              {% if user.is_authenticated and not user.is_staff %}
+                <a href="{% url 'order_create' pk=dish.id %}" class="add_btn">Add </a>
+                <a href="{% url 'review_create' pk=dish.id %}" class="review_btn">review</a>
+              {% endif %}
+              {% if user.is_authenticated and user.is_staff %}
+                    <a href="{% url 'dish_delete' pk=dish.id %}" class="delete_btn">Delete</a>
+                    <a href="{% url 'dish_update' pk=dish.id %}" class="edit_btn">Edit</a>
+              {% endif %}
+          </div>
+      </div>
     {% empty %}
-      <li>Dishes not found</li>
+        <div class="empty_message">
+            <h2>Dishes not found</h2>
+        </div>
     {% endfor %}
-  </ul>
+  </div>
 {% endblock %}

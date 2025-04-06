@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Delete order</h2>
-  <p>Are you sure you want delete "{{ object.dish.name }}?</p>
+<div class="order_delete ">
+  <div class="order_delete_confirm">
+      <h2>Delete order</h2>
+      <p>Are you sure you want delete "{{ object.dish.name }}?</p>
 
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Delete</button>
-    <a href="{% url 'order_list' %}">No, take me back</a>
-  </form>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="delete_button">Delete</button>
+        <a href="{% url 'order_list' %}" class="back_button">No, take me back</a>
+      </form>
+  </div>
+</div>
+
 {% endblock %}
